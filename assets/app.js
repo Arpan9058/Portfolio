@@ -122,11 +122,11 @@
   var rotator = document.getElementById('rotator');
   if (rotator) {
     var roles = [
-      'Node.js APIs',
-      'Spring Boot systems',
-      'AI integrations',
-      'marketing sites',
-      'internal dashboards'
+      'a phone',
+      'a tablet',
+      'an old laptop',
+      'a big monitor',
+      'anything'
     ];
     var span = rotator.querySelector('span');
 
@@ -305,44 +305,112 @@
     });
   });
 
-  /* ---------- contact form -> mail client ---------- */
+  /* ---------- contact form ---------- */
+  /*
+     Enquiries are delivered by Web3Forms (free, no account server-side).
+     Paste the access key from web3forms.com below and the form posts the
+     enquiry straight to the inbox that key is registered to.
+     While the key is empty the form falls back to opening the visitor's
+     mail app, so the form is never a dead end.
+  */
+
+  var WEB3FORMS_KEY = '';
+  var CONTACT_EMAIL = 'arpangupta0909@gmail.com';
 
   var form = document.getElementById('contactForm');
 
   if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    var note = document.getElementById('formNote');
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var submitLabel = submitBtn ? submitBtn.querySelector('span') : null;
 
-      var name = form.querySelector('#cf-name');
-      var email = form.querySelector('#cf-email');
-      var kind = form.querySelector('#cf-kind');
-      var msg = form.querySelector('#cf-msg');
+    function fields() {
+      return {
+        name: form.querySelector('#cf-name'),
+        business: form.querySelector('#cf-business'),
+        email: form.querySelector('#cf-email'),
+        phone: form.querySelector('#cf-phone'),
+        kind: form.querySelector('#cf-kind'),
+        msg: form.querySelector('#cf-msg')
+      };
+    }
+
+    function validate(f) {
       var ok = true;
-
-      [name, email, msg].forEach(function (input) {
+      [f.name, f.email, f.msg].forEach(function (input) {
         var valid = input.value.trim() !== '' && input.checkValidity();
         input.parentElement.classList.toggle('invalid', !valid);
         if (!valid && ok) { input.focus(); ok = false; }
       });
+      return ok;
+    }
 
-      if (!ok) {
-        showToast('Please fill in your name, a valid email and a message.');
+    function composeBody(f) {
+      return 'Name: ' + f.name.value.trim() + '\n' +
+             'Business: ' + (f.business.value.trim() || '—') + '\n' +
+             'Email: ' + f.email.value.trim() + '\n' +
+             'Phone: ' + (f.phone.value.trim() || '—') + '\n' +
+             'Needs: ' + f.kind.value + '\n\n' +
+             f.msg.value.trim() + '\n';
+    }
+
+    function openMailClient(f) {
+      window.location.href =
+        'mailto:' + CONTACT_EMAIL +
+        '?subject=' + encodeURIComponent('Website enquiry — ' + (f.business.value.trim() || f.name.value.trim())) +
+        '&body=' + encodeURIComponent(composeBody(f));
+      showToast('Opening your mail app…');
+    }
+
+    function setBusy(busy) {
+      if (!submitBtn) return;
+      submitBtn.disabled = busy;
+      if (submitLabel) submitLabel.textContent = busy ? 'Sending…' : 'Send enquiry';
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = fields();
+
+      if (!validate(f)) {
+        showToast('Please add your name, a valid email and a short message.');
         return;
       }
 
-      var subject = 'Project enquiry — ' + kind.value;
-      var body =
-        'Name: ' + name.value.trim() + '\n' +
-        'Email: ' + email.value.trim() + '\n' +
-        'Needs: ' + kind.value + '\n\n' +
-        msg.value.trim() + '\n';
+      if (!WEB3FORMS_KEY) { openMailClient(f); return; }
 
-      window.location.href =
-        'mailto:arpangupta0909@gmail.com' +
-        '?subject=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(body);
+      setBusy(true);
 
-      showToast('Opening your mail app…');
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: 'Website enquiry — ' + (f.business.value.trim() || f.name.value.trim()),
+          from_name: f.name.value.trim(),
+          name: f.name.value.trim(),
+          business: f.business.value.trim(),
+          email: f.email.value.trim(),
+          phone: f.phone.value.trim(),
+          needs: f.kind.value,
+          message: f.msg.value.trim()
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          setBusy(false);
+          if (data && data.success) {
+            form.reset();
+            showToast('Thank you — your enquiry has been sent.');
+            if (note) note.textContent = 'Sent. I will reply to ' + f.email.value.trim() + ' shortly.';
+          } else {
+            openMailClient(f);
+          }
+        })
+        .catch(function () {
+          setBusy(false);
+          openMailClient(f);
+        });
     });
 
     form.addEventListener('input', function (e) {
