@@ -50,8 +50,9 @@ repository root as a Pages artifact and deploys it. Nothing is built or bundled.
 
 - Fully responsive down to 320px.
 - All motion is disabled under `prefers-reduced-motion: reduce`.
-- The contact form posts to Web3Forms when `WEB3FORMS_KEY` is set in
-  `assets/app.js`; while that key is empty it falls back to composing a
-  `mailto:` draft, so the form is never a dead end.
+- The contact form posts enquiries to Web3Forms, which delivers them by
+  email. The access key lives in `WEB3FORMS_KEY` in `assets/app.js`; it is
+  a public delivery identifier, not a credential. If the request fails the
+  form falls back to composing a `mailto:` draft, so it is never a dead end.
 - ApexShield is labelled on both sites as a concept build for a fictional
   business; its sample photos and reviews are marked as illustrative.

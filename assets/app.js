@@ -314,7 +314,7 @@
      mail app, so the form is never a dead end.
   */
 
-  var WEB3FORMS_KEY = '';
+  var WEB3FORMS_KEY = '2ba851e7-2d14-4035-9e9c-ebb5a0ef79d7';
   var CONTACT_EMAIL = 'arpangupta0909@gmail.com';
 
   var form = document.getElementById('contactForm');
@@ -400,9 +400,11 @@
         .then(function (data) {
           setBusy(false);
           if (data && data.success) {
+            // read the address before reset() clears the field
+            var replyTo = f.email.value.trim();
             form.reset();
             showToast('Thank you — your enquiry has been sent.');
-            if (note) note.textContent = 'Sent. I will reply to ' + f.email.value.trim() + ' shortly.';
+            if (note) note.textContent = 'Sent. I will reply to ' + replyTo + ' shortly.';
           } else {
             openMailClient(f);
           }
