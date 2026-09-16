@@ -662,6 +662,19 @@ code{font-family:var(--mono);font-size:.88em;color:var(--mint)}
 .tech-note p{color:var(--text-2);font-size:.92rem;max-width:88ch}
 .tech-note b{color:var(--text);font-weight:600}
 
+.skill-split{
+  display:grid;grid-template-columns:1.6fr 1fr;gap:26px;
+  margin-top:22px;padding-top:20px;border-top:1px solid var(--line);
+}
+.skill-col h4{
+  margin:0 0 11px;font-family:var(--mono);font-size:.72rem;font-weight:500;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--text-3);
+}
+.chips-learning li{border-color:rgba(255,179,92,.34);color:var(--amber)}
+.skill-note{margin-top:10px;font-size:.8rem;color:var(--text-3);line-height:1.5}
+
+@media (max-width:660px){.skill-split{grid-template-columns:1fr;gap:20px}}
+
 /* ---------- grid children must be allowed to shrink ---------- */
 
 .contact-grid > *,.cards > *,.grid-4 > *,.steps > *,.stats > *,.demo-card > *{min-width:0}

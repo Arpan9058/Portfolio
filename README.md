@@ -1,7 +1,7 @@
 # Portfolio — Arpan Gupta
 
 A single-page site introducing my website work to small-business owners.
-Hand-written HTML, CSS and JavaScript — no framework, no build step, no runtime dependencies.
+Custom-built in HTML, CSS and JavaScript — no framework, no build step, no runtime dependencies.
 
 **Live:** https://arpan9058.github.io/Portfolio/
 
@@ -28,7 +28,7 @@ Hand-written HTML, CSS and JavaScript — no framework, no build step, no runtim
 index.html              markup for the whole page
 assets/styles.css       all styling, custom properties, responsive rules
 assets/app.js           scroll reveals, rotator, tilt, form delivery
-assets/*.jpg            example site and project screenshots
+assets/*.jpg            example site and project home-page screenshots
 assets/apexshield-cover.jpg   demo preview image
 .github/workflows/pages.yml   deploys to GitHub Pages on every push to main
 ```
