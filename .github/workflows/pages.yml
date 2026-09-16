@@ -1,7 +1,7 @@
 name: Deploy portfolio to GitHub Pages
 
 # Publishes the site at the root of the Pages URL,
-# so it lives at https://arpan9058.github.io/portfolio/
+# so it lives at https://arpan9058.github.io/Portfolio/
 
 on:
   push:

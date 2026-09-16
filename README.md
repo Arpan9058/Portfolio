@@ -3,7 +3,7 @@
 A single-page portfolio and client pitch site.
 Hand-written HTML, CSS and JavaScript — no framework, no build step, no runtime dependencies.
 
-**Live:** https://arpan9058.github.io/portfolio/
+**Live:** https://arpan9058.github.io/Portfolio/
 
 ## What is in it
 
